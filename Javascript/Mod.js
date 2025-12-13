@@ -6,6 +6,8 @@ let modInfo = {
 		"Layers/Universe.js",
 		"Layers/Money.js",
 		"Layers/Achievements.js",
+		"Layers/LayerPrestige.js",
+		"Layers/Boosters.js",
 
 
 		"Tree.js"
@@ -18,16 +20,16 @@ let modInfo = {
 }
 
 let VERSION = {
-	num: "0.0",
-	name: "Literally nothing",
+	num: "1.0",
+	name: "The Christmas Present that only gets Worse",
 }
 
-let changelog = (`
-	<h1>Changelog:</h1><br>
-		<h3>v0.0</h3><br>
-			- Added things. <br>
-			- Added stuff.
-`)
+function changelog() {return `
+<h1><goop>Changelog</goop></h1>
+<br>
+<small style="color:gray">Ew why is it gooey pls don't touch it?</small>
+<button class="tile can" style="height: 20px; width: auto">Touch it anyways?</button>
+`}
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 
@@ -64,7 +66,8 @@ function getPointGen() {
 
 function addedPlayerData() { return {
 	dialoguesTriggered: new Decimal(0),
-	challengeName: ``
+	challengeName: ``,
+	prestigeAmount: [new Decimal(0)]
 }}
 
 var displayThings = [
@@ -88,3 +91,7 @@ function maxTickLength() {
 
 function fixOldSave(oldVersion) {
 }
+
+let sounds = [
+	new Audio("Sounds/TouchGoop.ogg")
+]

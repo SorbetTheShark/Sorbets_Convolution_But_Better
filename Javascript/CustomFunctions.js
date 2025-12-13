@@ -31,6 +31,17 @@ async function replayContent(id) {
             await wait(6000)
             notify("I just hope this doesn't hinder us on our way to something far greater...", "D-Glung", 4, "crimson")
             player.dialoguesTriggered = player.dialoguesTriggered.add(1)
+            break;
+        case "layer prestige":
+            notify("Those room expansions are starting to get real expensive real quick so I've improvised a new feature.", "D-Glung", 5, "crimson")
+            await wait(5000)
+            notify("You can now prestige the layer at a cost of resetting all progress made on it. It's rather harsh in the beginning but it's worth it later on.", "D-Glung", 6, "crimson")
+            await wait(5500)
+            notify("The only problem is that collecting the essence needed is very tedious as it nerfs itself the more you currently have.", "D-Glung", 5, "crimson")
+            await wait(5000)
+            notify("Eventually it will be very helpful and you can automate it soon.", "D-Glung", 3, "crimson")
+            player.dialoguesTriggered = player.dialoguesTriggered.add(1)
+            break;
 
     }
 }

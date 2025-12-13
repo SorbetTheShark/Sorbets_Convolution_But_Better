@@ -23,7 +23,7 @@ addLayer("ach", {
     microtabs: {
         index: {
             "Normal": {
-                content: ["blank", ["achievements", 1]]
+                content: ["blank", "achievements"]
             },
 
             "Secret": {
@@ -43,7 +43,8 @@ addLayer("ach", {
             name: "MX-1",
             done() {return player.money.points.gte("e50")},
             tooltip: "Reach 1.00e50 Money",
-            onComplete() {player.ach.points = player.ach.points.add(1)}
+            onComplete() {player.ach.points = player.ach.points.add(1)},
+            unlocked() {return true}
         },
 
         12: {
@@ -51,6 +52,7 @@ addLayer("ach", {
             done() {return player.money.points.gte("e125")},
             tooltip: "Reach 1.00e125 Money",
             onComplete() {player.ach.points = player.ach.points.add(1)},
+            unlocked() {return true}
         },
 
         13: {
@@ -58,6 +60,7 @@ addLayer("ach", {
             done() {return player.money.points.gte("1.8e308")},
             tooltip: "Reach 1.80e308 Money",
             onComplete() {player.ach.points = player.ach.points.add(1)},
+            unlocked() {return true}
         },
 
         14: {
@@ -65,6 +68,7 @@ addLayer("ach", {
             done() {return player.money.points.gte("e1000")},
             tooltip: "Reach 1.00e1,000 Money",
             onComplete() {player.ach.points = player.ach.points.add(1)},
+            unlocked() {return true}
         },
 
         21: {
@@ -72,6 +76,15 @@ addLayer("ach", {
             done() {return player.universe.godParticles.gte(1000)},
             tooltip: "Reach 1,000 God Particles",
             onComplete() {player.ach.points = player.ach.points.add(1)},
+            unlocked() {return player.universe.points.gte(10)}
+        },
+
+        31: {
+            name: "LPX-1",
+            done() {return player.LPrestige.prestigeTimes().gte(10)},
+            tooltip: "Prestige layers 10 times",
+            onComplete() {player.ach.points = player.ach.points.add(1)},
+            unlocked() {return player.universe.points.gte(16)}
         }
     },
     milestones: {

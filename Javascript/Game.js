@@ -345,7 +345,8 @@ function gameLoop(diff) {
 	addTime(diff)
 
 	player.points = player.points.add(tmp.pointGen.times(diff)).max(0)
-	player.universe.godParticles = player.universe.godParticles.add(player.universe.godProduction().times(diff)).max(0)
+	if (player.universe.points.gte(10)) player.universe.godParticles = player.universe.godParticles.add(player.universe.godProduction().times(diff)).max(0)
+	if (hasMilestone("universe", 18)) player.LPrestige.points = player.LPrestige.points.add(player.LPrestige.prod().times(diff)).max(0)
 
 	for (let x = 0; x <= maxRow; x++){
 		for (item in TREE_LAYERS[x]) {

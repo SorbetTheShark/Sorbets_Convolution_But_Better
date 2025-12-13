@@ -23,6 +23,7 @@ addLayer("universe", {
         angerEffect() {
             let amt = player.universe.anger
             let powBase = new Decimal(2)
+            if (hasMilestone("universe", 18)) powBase = powBase.add(new Decimal(0.01).times(player.universe.points))
             let base = amt.pow(powBase)
             return base
         }
@@ -201,6 +202,20 @@ addLayer("universe", {
             effectDescription() {return `<nerfRed>Anger now increases how many points are required to reset.</nerfRed><br><buffGreen>Unlock a third buyable that improves the previous two.</buffGreen>`},
             done() {return player.universe.points.gte(15)},
             unlocked() {return hasMilestone("universe", 16)}
+        },
+
+        18: {
+            requirementDescription: "<novamono>16 Destroyed Universes</novamono> (S1E8)",
+            effectDescription() {return `<nerfRed>Anger's effect gradually scales faster based on universes.</nerfRed><br><buffGreen>Unlock the ability to prestige the Money layer.</buffGreen>`},
+            done() {return player.universe.points.gte(16)},
+            unlocked() {return hasMilestone("universe", 17)}
+        },
+
+        19: {
+            requirementDescription: "<novamono>19 Destroyed Universes</novamono> (S2E1)",
+            effectDescription() {return `<nerfRed>Prestige Essence gain nerfs itself at a harsher rate.</nerfRed><br><buffGreen>Unlock a new layer.</buffGreen>`},
+            done() {return player.universe.points.gte(19)},
+            unlocked() {return hasMilestone("universe", 18)}
         }
     },
     clickables: {
@@ -237,6 +252,13 @@ addLayer("universe", {
             unlocked() {return player.universe.points.gte(13)},
             canClick() {return this.unlocked()},
             onClick() {replayContent("anger")}
+        },
+
+        22: {
+            display() {return `<h3>Layer Prestige</h3>`},
+            unlocked() {return player.universe.points.gte(16)},
+            canClick() {return this.unlocked()},
+            onClick() {replayContent("layer prestige")}
         }
     },
     upgrades: {
