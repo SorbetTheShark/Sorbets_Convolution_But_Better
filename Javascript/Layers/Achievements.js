@@ -2,13 +2,8 @@ addLayer("ach", {
     startData() {return {
         unlocked: true,
         points: new Decimal(0),
-        timeEffect() {
-            return player.ach.points.times(3)
-        }
+        secret: new Decimal(0)
     }},
-    update() {
-        modInfo.offlineLimit = 1 + (Number(player.ach.timeEffect().div(60)))
-    },
     symbol: "<small>ACH</small>",
     color: "#E4DF54",
     layerShown: true,
@@ -17,13 +12,13 @@ addLayer("ach", {
     row: "side",
     tooltip: "Achievements",
     componentStyles: {
-        "microtabs"() {return {"border-color":"transparent"}}
+        "microtabs"() {return {"border-color":"transparent"}},
+        "milestone"() {return {"width":"600px"}}
     },
-    effectDescription() {return `granting an extra <text style="color: ${temp.ach.color}; text-shadow: 0 0 6px ${temp.ach.color}">${player.ach.timeEffect()}</text> minutes of MFT<br>MFT -> Max Offline Time`},
     microtabs: {
         index: {
             "Normal": {
-                content: ["blank", "achievements"]
+                content: ["blank", ["display-text", "The unfulfilled achievements are hiding for some reason..."], "blank", "achievements"]
             },
 
             "Secret": {
@@ -32,9 +27,7 @@ addLayer("ach", {
         }
     },
     tabFormat: [
-        "main-display",
-        "blank",
-        ["display-text", function() {return `Current Max Offline Time: ${format(modInfo.offlineLimit)} Hours`}],
+        ["display-text", function() {return `You have <h2 style="color: ${temp.ach.color}; text-shadow: 0 0 10px ${temp.ach.color}">${formatWhole(player.ach.points)}/7</h2> Achievements and <h2 style="color: ${temp.ach.color}; text-shadow: 0 0 10px ${temp.ach.color}">${formatWhole(player.ach.secret)}/1</h2> Secret Achievments`}],
         "blank",
         ["microtabs", "index"]
     ],
@@ -85,9 +78,29 @@ addLayer("ach", {
             tooltip: "Prestige layers 10 times",
             onComplete() {player.ach.points = player.ach.points.add(1)},
             unlocked() {return player.universe.points.gte(16)}
+        },
+
+        32: {
+            name: "LPX-2",
+            done() {return player.LPrestige.prestigeTimes().gte(30)},
+            tooltip: "Prestige layers 30 times",
+            onComplete() {player.ach.points = player.ach.points.add(1)},
+            unlocked() {return player.universe.points.gte(16)}
         }
     },
     milestones: {
+        11: {
+            done() {return player.secrets[0] == true},
+            requirementDescription: "Nothing Happened?",
+            effectDescription() {
+                if (player.secrets[0] !== true) {
+                    return "???"
+                } else {
+                    return "You touched the changelog but nothing happened. Are you sure you're actually human?"
+                }
+            },
+            onComplete() {player.ach.secret = player.ach.secret.add(1)}
+        }
     },
     update() {
     }

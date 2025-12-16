@@ -58,7 +58,7 @@ addLayer("universe", {
     base: new Decimal("e16"),
     row: 999,
     nodeStyle() {return {
-        "width":"450px",
+        "width":"400px",
         "background":"linear-gradient(90deg, #333, #444)",
         "border-radius":"25px",
         "background-repeat":"no-repeat",
@@ -81,7 +81,7 @@ addLayer("universe", {
             Milestones: {
                 content: ["blank", ["display-text", function() {
                     if (hasMilestone("universe", 17)) {
-                        return (`<br>Total effect from <text style="color: ${temp.universe.color}; text-shadow: 0 0 6px ${temp.universe.color}">(S1E7)</text>: x${format(player.universe.angerEffect())} Requirement Costs<br><br>`)
+                        return (`<br>Total effect from <text style="color: ${temp.universe.color}; text-shadow: 0 0 6px ${temp.universe.color}">(C1S1E7)</text>: x${format(player.universe.angerEffect())} Requirement Costs<br><br>`)
                     }
                 }], "milestones"]
             },
@@ -157,65 +157,79 @@ addLayer("universe", {
     ],
     milestones: {
         11: {
-            requirementDescription: "<novamono>1 Destroyed Universe</novamono> (S1E1)",
+            requirementDescription: "<novamono>1 Destroyed Universe</novamono> (C1S1E1)",
             effectDescription() {return `<nerfRed>Point gain is divided by 1.5.</nerfRed><br><buffGreen>Unlock the 2<sup>nd</sup> row of Money upgrades.</buffGreen>`},
             done() {return player.universe.points.gte(1)}
         },
 
         12: {
-            requirementDescription: "<novamono>2 Destroyed Universes</novamono> (S1E2)",
+            requirementDescription: "<novamono>2 Destroyed Universes</novamono> (C1S1E2)",
             effectDescription() {return `<nerfRed>Money gain is divided by 1.2.</nerfRed><br><buffGreen>Unlock the 3<sup>rd</sup> row of Money upgrades.</buffgreen>`},
             done() {return player.universe.points.gte(2)},
             unlocked() {return hasMilestone("universe", 11)}
         },
 
         13: {
-            requirementDescription: "<novamono>3 Destroyed Universes</novamono> (S1E3)",
+            requirementDescription: "<novamono>3 Destroyed Universes</novamono> (C1S1E3)",
             effectDescription() {return `<nerfRed>M(1-1)'s effect scales 1% slower.</nerfRed><br><buffGreen>Unlock the 4<sup>th</sup> row of Money upgrades.</buffGreen>`},
             done() {return player.universe.points.gte(3)},
             unlocked() {return hasMilestone("universe", 12)}
         },
 
         14: {
-            requirementDescription: "<novamono>6 Destroyed Universes</novamono> (S1E4)",
+            requirementDescription: "<novamono>6 Destroyed Universes</novamono> (C1S1E4)",
             effectDescription() {return `<nerfRed>M(1-3)'s effect is halved but never less than 1.</nerfRed><br><buffGreen>Unlock the last row of Money upgrades.</buffGreen>`},
             done() {return player.universe.points.gte(6)},
             unlocked() {return hasMilestone("universe", 13)}
         },
 
         15: {
-            requirementDescription: "<novamono>13 Destroyed Universes</novamono> (S1E5)",
+            requirementDescription: "<novamono>13 Destroyed Universes</novamono> (C1S1E5)",
             effectDescription() {return `<nerfRed>Start gaining anger for every destroyed universe past this.</nerfRed><br><buffGreen>Unlock the first buyable in the Money layer.</buffGreen>`},
             done() {return player.universe.points.gte(13)},
             unlocked() {return hasMilestone("universe", 14)}
         },
 
         16: {
-            requirementDescription: "<novamono>14 Destroyed Universes</novamono> (S1E6)",
+            requirementDescription: "<novamono>14 Destroyed Universes</novamono> (C1S1E6)",
             effectDescription() {return `<nerfRed>All Money upgrade effects scale 1% slower.</nerfRed><br><buffGreen>Unlock the other buyable in the Money layer.</buffGreen>`},
             done() {return player.universe.points.gte(14)},
             unlocked() {return hasMilestone("universe", 15)}
         },
 
         17: {
-            requirementDescription: "<novamono>15 Destroyed Universes</novamono> (S1E7)",
+            requirementDescription: "<novamono>15 Destroyed Universes</novamono> (C1S1E7)",
             effectDescription() {return `<nerfRed>Anger now increases how many points are required to reset.</nerfRed><br><buffGreen>Unlock a third buyable that improves the previous two.</buffGreen>`},
             done() {return player.universe.points.gte(15)},
             unlocked() {return hasMilestone("universe", 16)}
         },
 
         18: {
-            requirementDescription: "<novamono>16 Destroyed Universes</novamono> (S1E8)",
+            requirementDescription: "<novamono>16 Destroyed Universes</novamono> (C1S1E8)",
             effectDescription() {return `<nerfRed>Anger's effect gradually scales faster based on universes.</nerfRed><br><buffGreen>Unlock the ability to prestige the Money layer.</buffGreen>`},
             done() {return player.universe.points.gte(16)},
             unlocked() {return hasMilestone("universe", 17)}
         },
 
         19: {
-            requirementDescription: "<novamono>19 Destroyed Universes</novamono> (S2E1)",
+            requirementDescription: "<novamono>19 Destroyed Universes</novamono> (C1S2E1)",
             effectDescription() {return `<nerfRed>Prestige Essence gain nerfs itself at a harsher rate.</nerfRed><br><buffGreen>Unlock a new layer.</buffGreen>`},
             done() {return player.universe.points.gte(19)},
             unlocked() {return hasMilestone("universe", 18)}
+        },
+
+        20: {
+            requirementDescription: "<novamono>20 Destroyed Universes</novamono> (C1S2E2)",
+            effectDescription() {return `<nerfRed>Prestiging the Money layer gives a weaker bonus.</nerfRed><br><buffGreen>Unlock a row of Booster upgrades.</buffGreen>`},
+            done() {return player.universe.points.gte(20)},
+            unlocked() {return hasMilestone("universe", 19)}
+        },
+
+        21: {
+            requirementDescription: "<novamono>24 Destroyed Universes</novamono> (C1S2E3)",
+            effectDescription() {return `<nerfRed> Unlock a nerf that activates past 1.00e1500 Points</nerfRed><br><buffGreen>Unlock the 2<sup>nd</sup> row of Booster upgrades.</buffGreen>`},
+            done() {return player.universe.points.gte(24)},
+            unlocked() {return hasMilestone("universe", 20)}
         }
     },
     clickables: {
@@ -259,6 +273,13 @@ addLayer("universe", {
             unlocked() {return player.universe.points.gte(16)},
             canClick() {return this.unlocked()},
             onClick() {replayContent("layer prestige")}
+        },
+
+        23: {
+            display() {return `<h3>Nerfs?</h3>`},
+            unlocked() {return hasMilestone("universe", 21)},
+            canClick() {return this.unlocked()},
+            onClick() {replayContent("nerfs")}
         }
     },
     upgrades: {

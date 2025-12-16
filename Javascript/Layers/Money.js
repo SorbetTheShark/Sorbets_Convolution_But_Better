@@ -43,6 +43,10 @@ addLayer("money", {
             Buyables: {
                 content: ["blank", "buyables", "blank", "clickables"],
                 unlocked() {return hasMilestone("universe", 15)}
+            },
+
+            "Node Info": {
+                content: ["blank", ["display-text", "Multiversal Branch Type: (Index, 0, 0)"]]
             }
         }
     },
@@ -417,6 +421,7 @@ addLayer("money", {
         if (hasMilestone("universe", 15)) base = base.times(buyableEffect("money", 11))
         if (hasUpgrade("universe", 21)) base = base.times(upgradeEffect("universe", 21))
         if (hasMilestone("universe", 18)) base = base.times(buyableEffect("LPrestige", 11))
+        if (hasMilestone("universe", 21) && player.points.gte("e1500")) base = base.times(1500000)
         return base
     },
     passiveGeneration() {
@@ -449,5 +454,6 @@ addLayer("money", {
                 setBuyableAmount("money", 13, getBuyableAmount("money", 13).add(1))
             }
         }
-    }
+    },
+    branches: [["booster", 3]]
 })

@@ -51,19 +51,28 @@ addLayer("LPrestige", {
         ["microtabs", "index"]
     ],
     componentStyles: {
-        "buyable"() {return {"width":"575px", "border-radius":"50px", "height":"100px"}},
+        "buyable"() {return {"width":"575px", "border-radius":"50px", "height":"125px"}},
         "microtabs"() {return {"border-color":"transparent"}}
     },
     buyables: {
         11: {
             title() {return `Prestige Money Layer (Prestige ${formatWhole(getBuyableAmount("LPrestige", 11))})`},
-            display() {return `<br>Reset all Money and its upgrades and buyables for a x1.32 boost to Money Gain that compounds.<br><br>Cost: ${format(this.cost())} Prestige Essence<br>Effect: x${format(this.effect())} Money`},
+            display() {return `<br>Reset all Money and its upgrades and buyables for a x${format(this.effectPower())} boost to Money Gain that compounds.<br>Cost scales faster at Prestige 30<br><br>Cost: ${format(this.cost())} Prestige Essence<br>Effect: x${format(this.effect())} Money`},
             cost() {
-                let base = new Decimal(1).add(new Decimal(0.5).times(getBuyableAmount("LPrestige", 11).pow(1.5)))
+                let addBase = new Decimal(0.5)
+                if (getBuyableAmount("LPrestige", 11).gte(30)) addBase = addBase.add(0.6)
+                let powBase = new Decimal(1.5)
+                if  (getBuyableAmount("LPrestige", 11).gte(30)) powBase = powBase.add(0.3)
+                let base = new Decimal(1).add(new Decimal(addBase).times(getBuyableAmount("LPrestige", 11).pow(powBase)))
+                return base
+            },
+            effectPower() {
+                let base = new Decimal(1.32)
+                if (hasMilestone("universe", 20)) base = base.sub(0.04)
                 return base
             },
             effect() {
-                let mulBase = new Decimal(1.32)
+                let mulBase = this.effectPower()
                 let base = mulBase.pow(getBuyableAmount("LPrestige", 11))
                 return base
             },
