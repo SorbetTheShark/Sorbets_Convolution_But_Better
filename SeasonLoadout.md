@@ -16,6 +16,7 @@
 ### New Features
     - Booster Node (Point gain)
     - Nerfs Node (Point gain)
+    - God Particle Collider
 
 ### Range
-**~e1000 Points ->**
+**~e1000 Points -> ~e5400 Points**

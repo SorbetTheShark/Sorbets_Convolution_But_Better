@@ -23,7 +23,7 @@ addLayer("money", {
         player.money.effectText = txt
         
     },
-    symbol() {return `M<sub><small><small><small><small>${formatWhole(player.prestigeAmount[0])}</small></small></small></small></sub>`},
+    symbol() {return `M<sub><small><small><small><small><small>${formatWhole(player.prestigeAmount[0])}</small></small></small></small></small></sub>`},
     color: "#118C4F",
     layerShown: true,
     requires: new Decimal(10),
@@ -58,6 +58,8 @@ addLayer("money", {
         "main-display",
         "blank",
         "prestige-button",
+        "blank",
+        ["display-text", function() {if (temp.money.passiveGeneration.gte(0)) {return (`You are gaining <big style="color: ${temp.money.color}; text-shadow: 0 0 8px ${temp.money.color}">${format(temp.money.resetGain.times(temp.money.passiveGeneration))}</big> Money/sec (${formatWhole(temp.money.passiveGeneration.times(100))}% potency)`)}}],
         "blank",
         ["microtabs", "index"]
     ],
@@ -332,7 +334,7 @@ addLayer("money", {
     buyables: {
         11: {
             title: "<novamono><small>Artificial Stock Market</small></novamono>",
-            display() {return `Current Level: ${formatWhole(getBuyableAmount("money", 11))}/260<br><br>Establish a stock market purely controlled by a passive AI that simulates real-world stocks. Each level increases resource gain by <big>${format(this.effectPower())}</big>x, compounding.<br><br>Cost: ${format(this.cost())} Money<br>Effect: x${format(this.effect())} Money`},
+            display() {return `Current Level: ${formatWhole(getBuyableAmount("money", 11))}/${formatWhole(this.purchaseLimit())}<br><br>Establish a stock market purely controlled by a passive AI that simulates real-world stocks. Each level increases resource gain by <big>${format(this.effectPower())}</big>x, compounding.<br><br>Cost: ${format(this.cost())} Money<br>Effect: x${format(this.effect())} Money`},
             effectPower() {
                 let base = new Decimal(1.1)
                 if (hasMilestone("universe", 17)) base = base.times(buyableEffect("money", 13))
@@ -354,12 +356,17 @@ addLayer("money", {
                 player.money.points = player.money.points.sub(this.cost())
                 setBuyableAmount("money", 11, getBuyableAmount("money", 11).add(1))
             },
-            purchaseLimit: 260
+            purchaseLimit() {
+                let base = 260
+                if (hasUpgrade("booster", 41)) base += 50
+                if (hasUpgrade("booster", 44)) base += 25
+                return base
+            }
         },
 
         12: {
             title: "<novamono><small>Point Resource Buffer</small></novamono>",
-            display() {return `Current Level: ${formatWhole(getBuyableAmount("money", 12))}/260<br><br>Expansions in the Articical Stock Market allow the passive AI to also improve point production at a larger factor. Each level increases point gain by <big>${format(this.effectPower())}</big>x, compounding.<br><br>Cost: ${format(this.cost())} Money<br>Effect: x${format(this.effect())} Points`},
+            display() {return `Current Level: ${formatWhole(getBuyableAmount("money", 12))}/${formatWhole(this.purchaseLimit())}<br><br>Expansions in the Articical Stock Market allow the passive AI to also improve point production at a larger factor. Each level increases point gain by <big>${format(this.effectPower())}</big>x, compounding.<br><br>Cost: ${format(this.cost())} Money<br>Effect: x${format(this.effect())} Points`},
             effectPower() {
                 let base = new Decimal(1.3)
                 if (hasMilestone("universe", 17)) base = base.times(buyableEffect("money", 13))
@@ -381,12 +388,17 @@ addLayer("money", {
                 player.money.points = player.money.points.sub(this.cost())
                 setBuyableAmount("money", 12, getBuyableAmount("money", 12).add(1))
             },
-            purchaseLimit: 260
+            purchaseLimit() {
+                let base = 260
+                if (hasUpgrade("booster", 41)) base += 50
+                if (hasUpgrade("booster", 44)) base += 25
+                return base
+            }
         },
 
         13: {
             title: "<novamono><small>Room Expansions</small></novamono>",
-            display() {return `Current Level: ${formatWhole(getBuyableAmount("money", 13))}/75<br><br>The AI needs more room to improve itself, so you expand its quarters, providing a <big>${formatSmall(this.effectPower(), 4)}</big>x boost to the previous two effects' scaling, compounding.<br><br>Cost: ${format(this.cost())} Money<br>Effect: x${formatSmall(this.effect(), 4)} Buyable 1 & 2`},
+            display() {return `Current Level: ${formatWhole(getBuyableAmount("money", 13))}/${formatWhole(this.purchaseLimit())}<br><br>The AI needs more room to improve itself, so you expand its quarters, providing a <big>${formatSmall(this.effectPower(), 4)}</big>x boost to the previous two effects' scaling, compounding.<br><br>Cost: ${format(this.cost())} Money<br>Effect: x${formatSmall(this.effect(), 4)} Buyable 1 & 2`},
             effectPower() {
                 let base = new Decimal(1.0015)
                 return base
@@ -407,7 +419,12 @@ addLayer("money", {
                 player.money.points = player.money.points.sub(this.cost(getBuyableAmount("money", 13)))
                 setBuyableAmount("money", 13, getBuyableAmount("money", 13).add(1))
             },
-            purchaseLimit: 75
+            purchaseLimit() {
+                let base = 75
+                if (hasUpgrade("booster", 43)) base += 35
+                if (hasUpgrade("booster", 44)) base += 25
+                return base
+            }
         }
     },
     clickables: {
@@ -422,6 +439,7 @@ addLayer("money", {
         if (hasUpgrade("universe", 21)) base = base.times(upgradeEffect("universe", 21))
         if (hasMilestone("universe", 18)) base = base.times(buyableEffect("LPrestige", 11))
         if (hasMilestone("universe", 21) && player.points.gte("e1500")) base = base.times(1500000)
+        if (hasUpgrade("booster", 32)) base = base.times(player.booster.effects[1])
         return base
     },
     passiveGeneration() {
@@ -429,6 +447,7 @@ addLayer("money", {
         if (hasMilestone("LPrestige", 11)) base = base.add(0.01)
         if (hasMilestone("LPrestige", 12)) base = base.add(0.14)
         if (hasMilestone("LPrestige", 13)) base = base.add(new Decimal(0.01).times(getBuyableAmount("LPrestige", 11)))
+        if (hasMilestone("LPrestige", 12)) base = base.times(2)
         return base
     },
     autoUpgrade() {return hasMilestone("LPrestige", 11)},
@@ -441,19 +460,22 @@ addLayer("money", {
     ],
     automate() {
         if (hasMilestone("LPrestige", 12)) {
-            if (temp.money.buyables[11].canAfford && getBuyableAmount("money", 11).lt(260)) {
+            if (temp.money.buyables[11].canAfford && getBuyableAmount("money", 11).lt(temp.money.buyables[11].purchaseLimit)) {
                 player.money.points = player.money.points.sub(temp.money.buyables[11].cost)
                 setBuyableAmount("money", 11, getBuyableAmount("money", 11).add(1))
             }
-            if (temp.money.buyables[12].canAfford && getBuyableAmount("money", 12).lt(260)) {
+            if (temp.money.buyables[12].canAfford && getBuyableAmount("money", 12).lt(temp.money.buyables[12].purchaseLimit)) {
                 player.money.points = player.money.points.sub(temp.money.buyables[12].cost)
                 setBuyableAmount("money", 12, getBuyableAmount("money", 12).add(1))
             }
-            if (temp.money.buyables[13].canAfford && getBuyableAmount("money", 13).lt(75)) {
+            if (temp.money.buyables[13].canAfford && getBuyableAmount("money", 13).lt(temp.money.buyables[13].purchaseLimit)) {
                 player.money.points = player.money.points.sub(temp.money.buyables[13].cost)
                 setBuyableAmount("money", 13, getBuyableAmount("money", 13).add(1))
             }
         }
     },
-    branches: [["booster", 3]]
+    branches: [["booster", 3]],
+    onPrestige() {
+        player.sillyStats.prestigeTimes = player.sillyStats.prestigeTimes.add(1)
+    }
 })

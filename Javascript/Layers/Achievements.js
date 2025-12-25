@@ -13,12 +13,13 @@ addLayer("ach", {
     tooltip: "Achievements",
     componentStyles: {
         "microtabs"() {return {"border-color":"transparent"}},
-        "milestone"() {return {"width":"600px"}}
+        "milestone"() {return {"width":"600px"}},
+        "achievement"() {return {"width":"60px", "height":"60px", "visibility":"visible"}},
     },
     microtabs: {
         index: {
             "Normal": {
-                content: ["blank", ["display-text", "The unfulfilled achievements are hiding for some reason..."], "blank", "achievements"]
+                content: ["blank", "achievements"]
             },
 
             "Secret": {
@@ -27,7 +28,7 @@ addLayer("ach", {
         }
     },
     tabFormat: [
-        ["display-text", function() {return `You have <h2 style="color: ${temp.ach.color}; text-shadow: 0 0 10px ${temp.ach.color}">${formatWhole(player.ach.points)}/7</h2> Achievements and <h2 style="color: ${temp.ach.color}; text-shadow: 0 0 10px ${temp.ach.color}">${formatWhole(player.ach.secret)}/1</h2> Secret Achievments`}],
+        ["display-text", function() {return `You have <h2 style="color: ${temp.ach.color}; text-shadow: 0 0 10px ${temp.ach.color}">${formatWhole(player.ach.points)}/10</h2> Achievements and <h2 style="color: ${temp.ach.color}; text-shadow: 0 0 10px ${temp.ach.color}">${formatWhole(player.ach.secret)}/1</h2> Secret Achievments`}],
         "blank",
         ["microtabs", "index"]
     ],
@@ -59,7 +60,7 @@ addLayer("ach", {
         14: {
             name: "MX-4",
             done() {return player.money.points.gte("e1000")},
-            tooltip: "Reach 1.00e1,000 Money",
+            tooltip: "Reach 1.00e1000 Money",
             onComplete() {player.ach.points = player.ach.points.add(1)},
             unlocked() {return true}
         },
@@ -68,6 +69,22 @@ addLayer("ach", {
             name: "GPX-1",
             done() {return player.universe.godParticles.gte(1000)},
             tooltip: "Reach 1,000 God Particles",
+            onComplete() {player.ach.points = player.ach.points.add(1)},
+            unlocked() {return player.universe.points.gte(10)}
+        },
+
+        22: {
+            name: "GPX-2",
+            done() {return player.universe.godParticles.gte(10000)},
+            tooltip: "Reach 10,000 God Particles",
+            onComplete() {player.ach.points = player.ach.points.add(1)},
+            unlocked() {return player.universe.points.gte(10)},
+        },
+
+        23: {
+            name: "GPX-3",
+            done() {return player.universe.godParticles.gte(100000)},
+            tooltip: "Reach 100,000 God Particles",
             onComplete() {player.ach.points = player.ach.points.add(1)},
             unlocked() {return player.universe.points.gte(10)}
         },
@@ -86,7 +103,15 @@ addLayer("ach", {
             tooltip: "Prestige layers 30 times",
             onComplete() {player.ach.points = player.ach.points.add(1)},
             unlocked() {return player.universe.points.gte(16)}
-        }
+        },
+
+        41: {
+            name: "BSTX-1",
+            done() {return player.booster.points.gte(25)},
+            tooltip: "Reach 25 Boosters",
+            onComplete() {player.ach.points = player.ach.points.add(1)},
+            unlocked() {return player.universe.points.gte(19)}
+        },
     },
     milestones: {
         11: {

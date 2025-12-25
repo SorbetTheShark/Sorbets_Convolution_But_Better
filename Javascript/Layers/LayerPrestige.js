@@ -14,6 +14,9 @@ addLayer("LPrestige", {
             let base = player.points.add(1).log(logBase)
             if (hasMilestone("LPrestige", 11)) base = base.times(2)
             if (hasMilestone("LPrestige", 12)) base = base.times(2)
+            if (hasMilestone("LPrestige", 13)) base = base.times(2)
+            if (hasMilestone("LPrestige", 14)) base = base.times(3)
+            if (hasMilestone("universe", 21) && player.points.gte("e1500")) base = base.times(22.5)
             return base
         },
         prestigeTimes() {
@@ -57,7 +60,7 @@ addLayer("LPrestige", {
     buyables: {
         11: {
             title() {return `Prestige Money Layer (Prestige ${formatWhole(getBuyableAmount("LPrestige", 11))})`},
-            display() {return `<br>Reset all Money and its upgrades and buyables for a x${format(this.effectPower())} boost to Money Gain that compounds.<br>Cost scales faster at Prestige 30<br><br>Cost: ${format(this.cost())} Prestige Essence<br>Effect: x${format(this.effect())} Money`},
+            display() {return `<br>Reset all Money and its upgrades and buyables for a x${format(this.effectPower())} boost to Money Gain that compounds.<br>Cost scales faster at Prestige 30, 60, 100, and 200<br><br>Cost: ${format(this.cost())} Prestige Essence<br>Effect: x${format(this.effect())} Money`},
             cost() {
                 let addBase = new Decimal(0.5)
                 if (getBuyableAmount("LPrestige", 11).gte(30)) addBase = addBase.add(0.6)
@@ -105,6 +108,13 @@ addLayer("LPrestige", {
             requirementDescription: "Money Layer Prestige 20",
             effectDescription: "Passive gain is increased by 1% for every prestige performed on this layer, additively stacking.",
             unlocked() {return hasMilestone("LPrestige", 12)}
+        },
+
+        14: {
+            done() {return getBuyableAmount("LPrestige", 11).gte(33)},
+            requirementDescription: "Money Layer Prestige 33",
+            effectDescription: "Double the percentage of money gained from reset every second. This milestone also triples Prestige Essence gain instead of doubling.",
+            unlocked() {return hasMilestone("LPrestige", 13)}
         }
     }
 })

@@ -27,7 +27,7 @@ addLayer("nerf", {
                     ["display-text", function() {
                         let txt = ``
 
-                        if (hasMilestone("universe", 21) && player.points.gte("e1500")) txt += `<fieldset><legend>1.00e1500 Points</legend><angerRed>Point gain is raised to the power of 0.98</angerRed><br><buffGreen>Money gain is multiplied by 1,500,000</buffGreen>`
+                        if (hasMilestone("universe", 21) && player.points.gte("e1500")) txt += `<fieldset><legend>1.00e1500 Points</legend><angerRed>Point gain is raised to the power of 0.98</angerRed><br><buffGreen>Money gain is multiplied by 1,500,000<br>Prestige Essence gain is multiplied by 22.5</buffGreen>`
 
                         return txt
                     }]

@@ -12,6 +12,8 @@ addLayer("universe", {
             } else {
                 let powBase = 0.15
                 let base = player.universe.points.pow(powBase).div(100)
+                if (hasUpgrade("universe", 31)) base = base.times(4.5)
+                if (hasUpgrade("universe", 31)) base = base.times(buyableEffect("universe", 11))
                 return base
             }
         },
@@ -24,7 +26,9 @@ addLayer("universe", {
             let amt = player.universe.anger
             let powBase = new Decimal(2)
             if (hasMilestone("universe", 18)) powBase = powBase.add(new Decimal(0.01).times(player.universe.points))
+            if (hasMilestone("universe", 22)) powBase = powBase.pow(4.25)
             let base = amt.pow(powBase)
+            if (hasMilestone("universe", 22)) base = base.pow(1.8)
             return base
         }
     }},
@@ -42,7 +46,7 @@ addLayer("universe", {
         player.universe.effectText = txt
 
         if (player.universe.points.gte(14)) {
-            let mulBase = new Decimal(0.25)
+            let mulBase = new Decimal(0.4)
             player.universe.anger = (new Decimal(1).add(mulBase)).pow(player.universe.points.sub(13))
         }
     },
@@ -71,8 +75,9 @@ addLayer("universe", {
         "prestige-button"() {return {"width":"400px", "border-radius":"50px"}},
         "microtabs"() {return {"border-color":"transparent"}},
         "milestone"() {return {"width":"600px"}},
-        "upgrade"() {return {"width":"150px"}},
-        "clickable"() {return {"margin-bottom":"5px"}}
+        "upgrade"() {return {"width":"200px"}},
+        "clickable"() {return {"margin-bottom":"5px"}},
+        "buyable"() {return {"width":"250px"}}
     },
     roundUpCost: true,
     prestigeButtonText() {return `Reset <big>ALL</big> previous progress except those in side layers and itself for a destroyed universe.<br><br>Required Points: <big>${formatWhole(player.points)}/${format(getNextAt("universe"))}</big> Points`},
@@ -91,7 +96,7 @@ addLayer("universe", {
             },
 
             GPR: {
-                content: ["blank", ["display-text", function() {return `${format(player.universe.godParticles)} <lightGlow>God Particles</lightGlow><br><small>(${format(player.universe.godProduction())}/sec)`}], "blank", ["display-text", function() {if (player.universe.points.lt(10)) {return `Production starts at <big style="color: ${temp.universe.color}; text-shadow: 0 0 5px ${temp.universe.color}">10</big> Destroyed Universes`}}], "blank", ["microtabs", "god"]]
+                content: ["blank", ["display-text", function() {return `${formatSmall(player.universe.godParticles)} <lightGlow>God Particles</lightGlow><br><small>(${format(player.universe.godProduction())}/sec)`}], "blank", ["display-text", function() {if (player.universe.points.lt(10)) {return `Production starts at <big style="color: ${temp.universe.color}; text-shadow: 0 0 5px ${temp.universe.color}">10</big> Destroyed Universes`}}], "blank", ["microtabs", "god"]]
             },
 
             "Requirement Info": {
@@ -99,7 +104,8 @@ addLayer("universe", {
             },
 
             Challenges: {
-                content: ["blank", ["microtabs", "challengeTab"]]
+                content: ["blank", ["microtabs", "challengeTab"]],
+                unlocked() {return false}
             }
         },
 
@@ -109,7 +115,7 @@ addLayer("universe", {
             },
 
             Buyables: {
-                content: ["blank", ["display-text", function() {if (player.universe.points.lt(25)) return `<lightGlow>God Particle</lightGlow> buyables unlock once you destroy 25 universes...`}], "blank", "buyables"]
+                content: ["blank", ["display-text", function() {if ((hasUpgrade("universe", 31) === false)) return `<lightGlow>God Particle</lightGlow> buyables unlock once construct a particle collider...`}], "blank", "buyables"]
             }
         },
 
@@ -230,6 +236,20 @@ addLayer("universe", {
             effectDescription() {return `<nerfRed> Unlock a nerf that activates past 1.00e1500 Points</nerfRed><br><buffGreen>Unlock the 2<sup>nd</sup> row of Booster upgrades.</buffGreen>`},
             done() {return player.universe.points.gte(24)},
             unlocked() {return hasMilestone("universe", 20)}
+        },
+
+        22: {
+            requirementDescription: "<novamono>28 Destroyed Universes</novamono> (C1S2E4)",
+            effectDescription() {return `<nerfRed>Anger's effect from (C1S1E7) scales significantly faster.</nerfRed><br><buffGreen>Unlock the 3<sup>rd</sup> row of Booster upgrades.</buffGreen>`},
+            done() {return player.universe.points.gte(28)},
+            unlocked() {return hasMilestone("universe", 21)}
+        },
+
+        23: {
+            requirementDescription: "<novamono>32 Destroyed Universes</novamono> (C1S2E5)",
+            effectDescription() {return `<nerfRed>The first boost effect's softcap starts 15 OoMs earlier.</nerfRed><br><buffGreen>Unlock the 4<sup>th</sup> row of Booster upgrades.</buffGreen>`},
+            done() {return player.universe.points.gte(32)},
+            unlocked() {return hasMilestone("universe", 22)}
         }
     },
     clickables: {
@@ -284,7 +304,7 @@ addLayer("universe", {
     },
     upgrades: {
         11: {
-            fullDisplay() {return `<lightGlow-><big>UNI(1-1)</big></lightGlow-><br><br>Point gain is improved based on current particles.<br><br>Cost: 10 GP`},
+            fullDisplay() {return `<lightGlow-><big>UNI(1-1)</big></lightGlow-><br><br>Point gain is improved based on current particles.<br><br><br><br>Cost: 10 GP`},
             canAfford() {return player.universe.godParticles.gte(10)},
             pay() {player.universe.godParticles = player.universe.godParticles.sub(10)},
             unlocked() {return player.universe.points.gte(10)},
@@ -300,36 +320,79 @@ addLayer("universe", {
         },
 
         12: {
-            fullDisplay() {return `<lightGlow-><big>UNI(1-2)</big></lightGlow-><br><br>UNI(1-1) scales 15% faster and its effect is doubled.<br><br>Cost: 300 GP`},
+            fullDisplay() {return `<lightGlow-><big>UNI(1-2)</big></lightGlow-><br><br>UNI(1-1) scales 15% faster and its effect is doubled.<br><br><br><br>Cost: 300 GP`},
             canAfford() {return player.universe.godParticles.gte(300)},
             pay() {player.universe.godParticles = player.universe.godParticles.sub(300)},
             unlocked() {return hasUpgrade("universe", 11)}
         },
 
         13: {
-            fullDisplay() {return `<lightGlow-><big>UNI(1-3)</big></lightGlow-><br><br>UNI(1-1)'s effect is tripled and scales 5% faster.<br><br>Cost: 9,000 GP`},
+            fullDisplay() {return `<lightGlow-><big>UNI(1-3)</big></lightGlow-><br><br>UNI(1-1)'s effect is tripled and scales 5% faster.<br><br><br><br>Cost: 9,000 GP`},
             canAfford() {return player.universe.godParticles.gte(9000)},
             pay() {player.universe.godParticles = player.universe.godParticles.sub(9000)},
             unlocked() {return hasUpgrade("universe", 12)}
         },
 
         21: {
-            fullDisplay() {return `<lightGlow-><big>UNI(2-1)</big></lightGlow-><br><br>Money gain is improved based on current particles.<br><br>Cost: 500 GP`},
-            canAfford() {return player.universe.godParticles.gte(500)},
-            pay() {player.universe.godParticles = player.universe.godParticles.sub(500)},
+            fullDisplay() {return `<lightGlow-><big>UNI(2-1)</big></lightGlow-><br><br>Money gain is improved based on current particles.<br><br><br><br>Cost: 250 GP`},
+            canAfford() {return player.universe.godParticles.gte(250)},
+            pay() {player.universe.godParticles = player.universe.godParticles.sub(250)},
             unlocked() {return hasUpgrade("universe", 11)},
             effect() {
-                let logBase = 4.5
+                let logBase = new Decimal(4.5)
+                if (hasUpgrade("universe", 22)) logBase = logBase.div(2)
                 let base = player.universe.godParticles.add(1).log(logBase).add(1)
+                if (hasUpgrade("universe", 22)) base = base.times(2)
                 return base
             }
         },
+
+        22: {
+            fullDisplay() {return `<lightGlow-><big>UNI(2-2)</big></lightglow-><br><br>UNI(2-1)'s effect scales twice as fast and its effect is doubled.<br><br><br>Cost: 7,500 GP`},
+            canAfford() {return player.universe.godParticles.gte(7500)},
+            pay() {player.universe.godParticles = player.universe.godParticles.sub(7500)},
+            unlocked() {return hasUpgrade("universe", 21)},
+        },
+
+        31: {
+            fullDisplay() {return `<lightglow-><big>Construct a Particle Collider</big></lightglow-><br><br>Construct a particle collider and unlock buyables to improve its rate of production.<br><br>Cost: 3,500 GP`},
+            canAfford() {return player.universe.godParticles.gte(3500)},
+            pay() {player.universe.godParticles = player.universe.godParticles.sub(3500)},
+            unlocked() {return hasUpgrade("universe", 21) && hasMilestone("universe", 19)},
+            style() {return {"width":"450px"}}
+        }
+    },
+    buyables: {
+        11: {
+            title: "<novamono>Colder Electromagnets</novamono>",
+            display() {return `Current Level: ${formatWhole(getBuyableAmount("universe", 11))}<br><br>Submerge the particle collider's electromagnets in mystic fluids, making the electromagnets more effective at transporting particles at relativistic speeds. Each upgrade triples GP production, stacking upon each other.<br><br>Cost: ${format(this.cost())} God Particles<br>Effect: x${format(this.effect())} production`},
+            effect() {
+                let mulBase = new Decimal(3)
+                let base = mulBase.pow(getBuyableAmount("universe", 11))
+                return base
+            },
+            cost() {
+                let initial = new Decimal(1000)
+                let scale = new Decimal(1000).times(getBuyableAmount("universe", 11).pow(2)).tetrate(1.035)
+                let base =  initial.add(scale)
+                return base
+            },
+            canAfford() {return player.universe.godParticles.gte(this.cost())},
+            buy() {
+                player.universe.godParticles = player.universe.godParticles.sub(this.cost())
+                setBuyableAmount("universe", 11, getBuyableAmount("universe", 11).add(1))
+            },
+            unlocked() {return hasUpgrade("universe", 31)}
+        }
     },
     branches: [["money", 3]],
     gainMult() {
         let base = new Decimal(1)
         if (hasMilestone("universe", 17)) base = base.times(player.universe.angerEffect())
         return base
+    },
+    onPrestige() {
+        player.sillyStats.prestigeTimes = player.sillyStats.prestigeTimes.add(1)
     }
 })
 

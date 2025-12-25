@@ -42,6 +42,14 @@ async function replayContent(id) {
             notify("Eventually it will be very helpful and you can automate it soon.", "D-Glung", 3, "crimson")
             player.dialoguesTriggered = player.dialoguesTriggered.add(1)
             break;
+        case "nerfs":
+            notify("This is also something I did not expect to occur spontaneously. This is making me think something else is out there", "D-Glung", 6, "crimson")
+            await wait(5000)
+            notify("But I've quickly found a way to divert much of its negative effects by implementing buffs that will help you.", "D-Glung", 5.5, "crimson")
+            await wait(4500)
+            notify("Just fight through it and it will be like it was never there.", "D-Glung", 3, "crimson")
+            player.dialoguesTriggered = player.dialoguesTriggered.add(1)
+            break;
 
     }
 }

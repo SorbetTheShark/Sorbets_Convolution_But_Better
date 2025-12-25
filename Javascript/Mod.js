@@ -1,5 +1,5 @@
 let modInfo = {
-	name: "Sorbet's Convolution Extended",
+	name: "Sorbet's Convolution: Mainframe",
 	author: "SorbetShark",
 	pointsName: "Points",
 	modFiles: [
@@ -21,7 +21,7 @@ let modInfo = {
 }
 
 let VERSION = {
-	num: "1.0",
+	num: "1.0.0",
 	name: "The Christmas Present that only gets Worse",
 }
 
@@ -30,6 +30,20 @@ function changelog() {return `
 <br>
 <small style="color:gray">Ew why is it gooey pls don't touch it.</small>
 <button onClick="{{player.secrets[0] = true; playSound(0)}}" class="tile can" style="height: 20px; width: auto; border-radius: 3px">Touch it anyways?</button>
+<br> <br>
+<hr style="width:600px">
+<br> <br>
+<h2> Version 1.0.0 (The Christmas Present that only gets Worse) </h2>
+<br> <br> <small> <gray>
+<big> <big> Game Release!!1!1!!!1</big> </big>
+<br>
+Added 6 nodes
+<br>
+Tweaked OoMs/sec to show at 25 instead of 100
+<br> 
+Nonexistant Endgame: Universe 36
+</small> </gray>
+
 `}
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
@@ -72,7 +86,10 @@ function addedPlayerData() { return {
 	dialoguesTriggered: new Decimal(0),
 	challengeName: ``,
 	prestigeAmount: [new Decimal(0)],
-	secrets: [false]
+	secrets: [false],
+	sillyStats: {
+		prestigeTimes: new Decimal(0)
+	}
 }}
 
 var displayThings = [
@@ -81,7 +98,7 @@ var displayThings = [
 ]
 
 function isEndgame() {
-	return player.points.gte(new Decimal("e280000000"))
+	return false
 }
 
 
@@ -104,4 +121,11 @@ let sounds = [
 function playSound(id) {
 	sounds[id].currentTime = 0
 	sounds[id].play()
+}
+
+function visualizer() {
+	for (let i = 0; i < player.points.length; index++) {
+		const element = array[index];
+		
+	}
 }
